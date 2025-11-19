@@ -32,21 +32,22 @@ An advanced AI-powered tool for generating complete Reddit-style video stories.
 git clone https://github.com/evvskx/Redditator.git
 cd Redditator
 
+# Run the main script
 ./redditator.sh
 ```
 
 ## 🧹 Cleanup
 
+Redditator may consume up to ~30 GB of disk space.
+You can remove old containers by running:
 ```bash
-# This command purges all docker's container
-# created by the owner Redditator
 ./redditator.sh --cleanup
 ```
 
 ## ✨ Contributors
 
 <div align="center">
-  <a href="https://github.com/evvskx/Redditator/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=evvskx/Redditator" />
+  <a href="https://github.com/redditator/main/graphs/contributors">
+    <img src="https://contrib.rocks/image?repo=redditator/main" />
   </a>
 </div>

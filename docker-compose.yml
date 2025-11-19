@@ -1,0 +1,23 @@
+version: "3.9"
+
+services:
+  redditator:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    labels:
+      owner: redditator
+    volumes:
+      - .:/app
+      - ollama_data:/root/.ollama
+      - tts_data:/root/.local/share/tts
+    stdin_open: true
+    tty: true
+
+volumes:
+  ollama_data:
+    labels:
+      owner: redditator
+  tts_data:
+    labels:
+      owner: redditator

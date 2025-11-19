@@ -1,0 +1,16 @@
+# --- AI / LLM ---
+ollama
+transformers
+sentencepiece
+
+# --- Audio / DSP ---
+numpy
+soundfile
+librosa
+pydub
+TTS
+
+# --- Config ---
+PyYAML
+
+# --- External libraries ---

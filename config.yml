@@ -1,0 +1,14 @@
+story_prompt: "Generate a dramatic, intense, modern Reddit-style story centered on toxic family dynamics or broken relationships. The story MUST START with a Reddit-style question addressed to readers, such as: 'Redditors, am I wrong for what I did?'. The tone should be heavy, emotional, and high-stakes, with shocking reveals, extreme situations, and lasting consequences. Themes may include faking one's own funeral to discover who truly cared, or a partner whose social media fame leads them to humiliate the protagonist publicly until they face harsh consequences. The story should be long, immersive, and include a powerful twist. Provide only the story, no title, no extra commentary, no extra markdown (such as *, __ etc.)."
+
+config:
+  video_max_length_seconds: 2026
+  video_resolution: "1080x1920"
+
+  ollama_model: "gemma3:4b"
+
+paths:
+  video_backgrounds: "./assets/backgrounds"
+  output_video: "./output"
+  subtitle_font: "./sources/fonts/main.ttf"
+
+debug: true

@@ -38,7 +38,7 @@ cd Redditator
 
 ## 🧹 Cleanup
 
-Redditator may consume up to ~30 GB of disk space.
+Redditator may use more than 10 GB of disk space.
 You can remove old containers by running:
 ```bash
 ./redditator.sh --cleanup

@@ -81,7 +81,20 @@ class AudioGenerator:
 
     def _generate_and_trim_group_audio(self, group: str):
         temp_wav = tempfile.NamedTemporaryFile(delete=False, dir="/tmp", suffix=".wav")
-        tts_model.tts_to_file(text=group, speaker=tts_speaker, file_path=temp_wav.name)
+
+        stdout_backup = sys.stdout
+        stderr_backup = sys.stderr
+        sys.stdout = open(os.devnull, 'w')
+        sys.stderr = open(os.devnull, 'w')
+
+        try:
+            tts_model.tts_to_file(text=group, speaker=tts_speaker, file_path=temp_wav.name)
+        finally:
+            sys.stdout.close()
+            sys.stderr.close()
+            sys.stdout = stdout_backup
+            sys.stderr = stderr_backup
+
         audio_data, sr = librosa.load(temp_wav.name, sr=SAMPLE_RATE)
         start_idx = self._find_audio_start(audio_data, sr)
         end_idx = self._find_audio_end(audio_data, sr)
@@ -93,6 +106,7 @@ class AudioGenerator:
             wav_file.setframerate(SAMPLE_RATE)
             wav_file.writeframes(audio_int16.tobytes())
         return temp_wav.name
+
 
     def _generate_silence(self, duration: float):
         samples = int(SAMPLE_RATE * duration)

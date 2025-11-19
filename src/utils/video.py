@@ -2,6 +2,7 @@ import os, random
 import subprocess, string
 from pathlib import Path
 from utils.log import log
+from fontTools.ttLib import TTFont
 
 class VideoCreator:
     def __init__(self, backgrounds_folder: str, config: dict):
@@ -11,7 +12,6 @@ class VideoCreator:
         self.width, self.height = map(int, self.resolution.split('x'))
 
     def create_video(self, audio_path: str, timestamps=None):
-        print("\n[debug] generating video...")
         files = [
             os.path.join(self.backgrounds_folder, f)
             for f in os.listdir(self.backgrounds_folder)
@@ -47,7 +47,7 @@ class VideoCreator:
         subtitle_file_abs = os.path.abspath(subtitle_file)
         vf_filter = (
             f"scale={self.width}:{self.height}:force_original_aspect_ratio=increase:flags=lanczos,"
-            f"crop={self.width}:{self.height},subtitles={subtitle_file_abs}:force_style='Outline=3'"
+            f"crop={self.width}:{self.height},subtitles={subtitle_file_abs}:fontsdir=sources/fonts:force_style='Outline=3'"
         )
 
         ffmpeg_cmd = [
@@ -126,6 +126,23 @@ class VideoCreator:
                 current_time += time_needed
                 i += 1
 
+    def __fetch_font_name(self):
+        font_file = self.config['paths']['subtitle_font']
+        ttf_path = str(font_file)
+
+        font = TTFont(ttf_path)
+        name_records = font['name'].names
+
+        for record in name_records:
+            if record.nameID == 1:
+                try:
+                    return record.string.decode(record.getEncoding())
+                except:
+                    return record.string.decode('utf-8', errors='ignore')
+
+        return font.stem
+
+
     def _create_subtitle_ass_file(self, timestamps: list, subtitle_file: str, video_duration: float):
         with open(subtitle_file, 'w', encoding='utf-8') as f:
             f.write("[Script Info]\n")
@@ -134,7 +151,7 @@ class VideoCreator:
             f.write(f"PlayResY: {self.height}\n")
             f.write("[V4+ Styles]\n")
             f.write("Format: Name, Fontname, Fontsize, PrimaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding\n")
-            f.write(f"Style: Default,Arial,75,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,3,0,5,0,0,0,1\n")
+            f.write(f"Style: Default,{self.__fetch_font_name()},75,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,3,0,5,0,0,0,1\n")
             f.write("[Events]\n")
             f.write("Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text\n")
             for i, ts in enumerate(timestamps):

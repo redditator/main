@@ -12,7 +12,6 @@ import os
 SAMPLE_RATE = 24000
 
 tts_model = TTS("tts_models/en/vctk/vits", gpu=False, progress_bar=False)
-
 tts_speaker = "p243"
 
 class AudioGenerator:

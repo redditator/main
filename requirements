@@ -8,9 +8,7 @@ numpy
 soundfile
 librosa
 pydub
-TTS
+git+https://github.com/coqui-ai/TTS.git
 
 # --- Config ---
 PyYAML
-
-# --- External libraries ---

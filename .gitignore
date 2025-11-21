@@ -1,17 +1,24 @@
-__pycache__
-.venv
+# python
+__pycache__/
 *.pyc
-.env
-.DS_Store
+.venv/
+.env/
+*.pyw
+
+# editors
 .idea/
 .vscode/
+
+# macos
+.DS_Store
+
+# assets
 *.mp4
 *.mov
-*.avi
-*.mkv
-*.flv
-*.wmv
-*.pyw
-.docker_build_hash
+
+# temp files
 *temp*
 *tmp*
+
+# hashes
+.docker_build_hash

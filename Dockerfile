@@ -31,5 +31,4 @@ COPY . .
 COPY redditator.sh /redditator.sh
 RUN chmod +x /redditator.sh
 
-# Set the entrypoint - this tells the container to run the script
 ENTRYPOINT ["/redditator.sh"]

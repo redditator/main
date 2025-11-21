@@ -152,18 +152,15 @@ check_docker_group() {
 
 host_mode() {
     log_step "running in host mode"
-    
-    # main execution flow
+
     load_docker_cmd
     check_docker_group
 
-    # check docker-compose installation
     if ! command -v docker-compose &>/dev/null && ! $DOCKER_CMD compose version &>/dev/null; then
         log_warn "docker-compose not found, installing..."
         install_docker
     fi
 
-    # handle arguments
     case "${1:-}" in
         "--cleanup")
             log_step "cleaning docker resources"
@@ -182,32 +179,27 @@ host_mode() {
             ;;
     esac
 
-    # build cache check
     BUILD_HASH_FILE=".docker_build_hash"
     current_hash=$(sha256sum "$DOCKERFILE_PATH" requirements 2>/dev/null | sha256sum | awk '{print $1}')
 
-    # determine compose command
     DOCKER_COMPOSE="$DOCKER_CMD compose"
     if ! $DOCKER_COMPOSE version &>/dev/null; then
         DOCKER_COMPOSE="$DOCKER_CMD-compose"
     fi
 
-    # build if needed
     if [[ ! -f "$BUILD_HASH_FILE" ]] || [[ "$(cat "$BUILD_HASH_FILE" 2>/dev/null)" != "$current_hash" ]]; then
         log_step "building image"
         $DOCKER_COMPOSE -f "$COMPOSE_FILE" build
         echo "$current_hash" > "$BUILD_HASH_FILE"
     fi
 
-    # run container
     log_step "starting redditator container"
     $DOCKER_COMPOSE -f "$COMPOSE_FILE" run --rm redditator
 }
 
-# MAIN EXECUTION
 if is_container; then
     log_info "running in container mode"
-    # In container, ignore all host logic and just run the app
+    # in container, ignore all host logic and just run the app
     container_entrypoint
 else
     host_mode "$@"
